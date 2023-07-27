@@ -84,7 +84,7 @@ The Shopper.AI Backend APIs are now up and running locally at `http://localhost:
 
 [Gitpod](https://www.gitpod.io/) provides a ready-to-code development environment with all the tools you need for seamless development. To start the project in Gitpod:
 
-1. Click on the following link to open the workspace: [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/AbhishekCS3459/BackendApis)
+1.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/AbhishekCS3459/BackendApis)
 
 2. This will launch a Gitpod workspace with the project already cloned and dependencies installed.
 
