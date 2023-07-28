@@ -17,10 +17,10 @@ router.post("/send-notification", async (req, res) => {
 
 // Subscribe to the newsletter
 
-router.post("/send-mail", (req,res) => {
+router.post("/send-mail", (req, res) => {
   const { recipientName, senderName, ReciverEmail, subject, text } = req.body;
   sendMail(recipientName, senderName, ReciverEmail, subject, text)
-    .then((result) => res.json({"Email sent...": result}))
+    .then((result) => res.json({ "Email sent...": result }))
     .catch((error) => console.log("error:" + error.message));
 });
 
@@ -29,18 +29,26 @@ router.post("/newsletter-subscribers", async (req, res) => {
     const { recipientName, senderName, ReciverEmail, subject, text } = req.body;
     const OfficalEmailAuth = process.env.AUTHGMAIL;
 
-    // const subscriber = await NewsletterSubscriber.create({
-    //   email: ReciverEmail,
-    // });
+    const subscribers = await NewsletterSubscriber.find({
+      email: ReciverEmail,
+    });
+    if (subscribers.length != 0) {
+      res.status(200).json("Already Subscribed ");
+      return;
+    }
 
-    // if (subscriber) {
+    const newsubscriber = await NewsletterSubscriber.create({
+      email: ReciverEmail,
+    });
+
+    if (newsubscriber) {
       sendMail(recipientName, senderName, ReciverEmail, subject, text)
         .then((result) => {
           console.log("Email sent...", result);
         })
         .catch((error) => console.log("error:" + error.message));
-    
-    res.status(200).json("subscriber");
+    }
+    res.status(200).json(newsubscriber);
   } catch (err) {
     console.log(err);
     res.status(400).json({ error: "Failed to subscribe to the newsletter" });

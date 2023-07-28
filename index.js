@@ -2,22 +2,53 @@ const express = require('express')
 const app = express()
 const port = 3000
 const sendMail=require('./routes/SendMail')
+const mongoose = require("mongoose");
+// set the port
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+require("dotenv").config();
+
+app.use(express.json());
+
+app.use((_, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
+app.use(cookieParser());
+
+// connect to database
+app.use(express.urlencoded({ extended: true }));
+
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Event listener for successful connection
+mongoose.connection.on("connected", () => {
+  console.log("Database connection successful"); // Display notification
+});
+
+
+
 app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/send-mail',(req,res)=>{
-    const recipientName = "Verma"; // Replace with the recipient's name
-const senderName = "Abhishek"; // Replace with your name
-const ReciverEmail = "abhishekverman3459@gmail.com";
-const OfficalEmailAuth = process.env.AUTHGMAIL;
-const subject = "Hello from Gmail using API";
-const text = `Hello ${recipientName},\n\nThis is a dynamic email sent using the Backend. Feel free to customize the content as needed.\n\nBest regards,\n${senderName}`;
-
-sendMail(recipientName, senderName, ReciverEmail, subject, text)
-  .then((result) => console.log("Email sent...", result))
-  .catch((error) => console.log("error:" + error.message));
-})
 
 
 
+app.use(require("./routes/login_routes")); // login page
+app.use(require("./routes/logout_routes")); // logout page
+app.use(require("./routes/signup_routes")); // signup page
+app.use(require("./routes/TeamRoutes")); // Team Members
+app.use(require("./routes/NewsLetter")); // newspaper letter subscriber 
+app.use(require("./routes/Faqs")); // Faqs letter subscriber 
+// app.use(require("./routes/admin_routes")); // admin page
 
 
 
