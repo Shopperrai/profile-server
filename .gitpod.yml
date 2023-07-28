@@ -1,0 +1,12 @@
+image:
+  file: .gitpod.Dockerfile
+
+# Specify the start tasks to run when Gitpod workspace is created
+tasks:
+  - init: npm install
+  - command: npm start
+
+# Expose the default port used by your backend server (replace 3000 with your actual port if different)
+ports:
+  - port: 3000
+    onOpen: ignore
